@@ -1,6 +1,7 @@
 const life = document.getElementById('life')
 const go = document.getElementById('go')
 const pause = document.getElementById('pause')
+const WIDTH = 20
 
 const directions = [
   { x: -1, y: -1 },
@@ -13,9 +14,22 @@ const directions = [
   { x:  0, y: -1 },
 ]
 
+function chunk(numbers) {
+  const output = []
+  while (numbers.length > 0) {
+    output.push(numbers.substring(0, WIDTH).split('').map(Number))
+    numbers = numbers.substring(WIDTH)
+  }
+  return output
+}
+
+function unchunk(board) {
+  return board.map(line => line.map(Number).join('')).join('')
+}
+
 go.addEventListener('mousedown', () => {
   const board = undraw()
-  const string = JSON.stringify(board.map(line => line.map(Number)))
+  const string = JSON.stringify(unchunk(board))
   pause.style.display = 'block'
   go.style.display = 'none'
   localStorage.setItem('board', string)
@@ -97,12 +111,12 @@ function loop(board) {
 
 function storage() {
   const storage = localStorage.getItem('board')
-  return storage && JSON.parse(storage)
+  return storage && chunk(JSON.parse(storage))
 }
 
 function hash() {
   const hashBoard = location.hash
-  return hash.length > 0 && JSON.parse(decodeURIComponent(hash))
+  return hash.length > 0 && chunk(JSON.parse(decodeURIComponent(hash)))
 }
 
-draw(hash() || storage() || board(20))
+draw(hash() || storage() || board(WIDTH))
