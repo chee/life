@@ -36,7 +36,7 @@ life.addEventListener('mousedown', event => {
       event.target.checked = !checked
     }
     life.addEventListener('mouseover', mouseover, false)
-    life.addEventListener('mouseup', function mouseup() {
+    window.addEventListener('mouseup', function mouseup() {
       life.removeEventListener('mouseup', mouseup, false)
       life.removeEventListener('mouseover', mouseover, false)
     })
