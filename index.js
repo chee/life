@@ -1,19 +1,6 @@
-const t = true
-const f = false
-
-const board = [
-// 0  1  2  3  4  5  6  7  8  9
-  [f, f, f, f, f, f, f, f, f, f ], // 0
-  [f, f, f, f, f, t, f, f, f, f ], // 1
-  [f, f, f, f, t, t, t, f, f, f ], // 2
-  [f, f, f, t, f, t, f, t, f, f ], // 3
-  [f, f, t, t, t, f, t, t, t, f ], // 4
-  [f, f, f, t, f, t, f, t, f, f ], // 5
-  [f, f, f, f, t, t, t, f, f, f ], // 6
-  [f, t, f, f, f, t, f, f, f, f ], // 7
-  [t, t, t, f, f, f, f, f, f, f ], // 8
-  [f, t, f, f, f, f, f, f, f, f ], // 9
-]
+const life = document.getElementById('life')
+const go = document.getElementById('go')
+const pause = document.getElementById('pause')
 
 const directions = [
   { x: -1, y: -1 },
@@ -26,14 +13,48 @@ const directions = [
   { x:  0, y: -1 },
 ]
 
-function draw(board) {
-  document.getElementById('canvas').innerHTML = board.map(line => (
-    line.map(cell => cell ? '#' : '.').join(' ')
-  )).join('\n')
+go.addEventListener('mousedown', () => {
+  pause.style.display = 'block'
+  go.style.display = 'none'
+  loop(undraw())
+})
+
+pause.addEventListener('mousedown', () => {
+  go.style.display = 'block'
+  pause.style.display = 'none'
+  clearTimeout(timeout)
+})
+
+function board(width, height = width) {
+  const row = [...Array(width)].map(Boolean)
+  const board = []
+  while (height--) {
+    board.push([...row])
+  }
+  return board
 }
 
-~function loop(board) {
-  draw(board)
+function draw(board) {
+  const checkbox = document.createElement('input')
+  checkbox.type = 'checkbox'
+  life.innerHTML = board.map(line => (
+    '<div>' +
+    line.map(cell => (cell
+      ? checkbox.setAttribute('checked', 'checked')
+      : checkbox.removeAttribute('checked')) || checkbox.outerHTML
+    ).join('')
+    + '</div>'
+  )).join('')
+}
+
+function undraw() {
+  return [...life.children]
+    .map(line => [...line.children]
+      .map(input => input.checked))
+}
+
+let timeout
+function loop(board) {
   board = board.map((row, rowIndex) => (
     row.map((cell, columnIndex) => {
       let friends = 0
@@ -47,7 +68,11 @@ function draw(board) {
       return cell
     })
   ))
-  setTimeout(() => {
-    loop(board)
-  }, 500)
-}(board)
+  clearTimeout(timeout)
+  timeout = setTimeout(() => {
+    draw(board)
+    loop(undraw())
+  }, 250)
+}
+
+draw(board(20))
