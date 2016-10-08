@@ -16,14 +16,14 @@ const board = [
 ]
 
 const directions = [
-  [-1, -1],
-  [-1,  0],
-  [-1,  1],
-  [ 0,  1],
-  [ 1,  1],
-  [ 1,  0],
-  [ 1, -1],
-  [ 0, -1]
+  { x: -1, y: -1 },
+  { x: -1, y:  0 },
+  { x: -1, y:  1 },
+  { x:  0, y:  1 },
+  { x:  1, y:  1 },
+  { x:  1, y:  0 },
+  { x:  1, y: -1 },
+  { x:  0, y: -1 },
 ]
 
 ~function loop(board) {
@@ -32,8 +32,8 @@ const directions = [
     row.map((cell, columnIndex) => {
       let friends = 0
       directions.forEach(direction => {
-        let row = board[rowIndex + direction[0]]
-        row && row[columnIndex + direction[1]] == '#' && (friends += 1)
+        let row = board[rowIndex + direction.x]
+        row && row[columnIndex + direction.y] && (friends += 1)
       })
       if (friends < 2) return false
       if (friends > 3) return false
