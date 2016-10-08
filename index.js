@@ -14,9 +14,11 @@ const directions = [
 ]
 
 go.addEventListener('mousedown', () => {
+  const board = undraw()
   pause.style.display = 'block'
   go.style.display = 'none'
-  loop(undraw())
+  localStorage.setItem('board', JSON.stringify(board))
+  loop(board)
 })
 
 pause.addEventListener('mousedown', () => {
@@ -91,4 +93,5 @@ function loop(board) {
   }, 250)
 }
 
-draw(board(20))
+let storageBoard = localStorage.getItem('board')
+draw((storageBoard && JSON.parse(storageBoard)) || board(20))
