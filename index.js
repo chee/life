@@ -26,8 +26,14 @@ const directions = [
   { x:  0, y: -1 },
 ]
 
+function draw(board) {
+  document.getElementById('canvas').innerHTML = board.map(line => (
+    line.map(cell => cell ? '#' : '.').join(' ')
+  )).join('\n')
+}
+
 ~function loop(board) {
-  canvas.innerHTML = board.map(line => line.join(' ')).join('\n')
+  draw(board)
   board = board.map((row, rowIndex) => (
     row.map((cell, columnIndex) => {
       let friends = 0
