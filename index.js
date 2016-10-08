@@ -25,6 +25,22 @@ pause.addEventListener('mousedown', () => {
   clearTimeout(timeout)
 })
 
+life.addEventListener('mousedown', event => {
+  const target = event.target
+  if (target.type == 'checkbox') {
+    const checked = target.checked
+    function mouseover(event) {
+      target.checked = !checked
+      event.target.checked = !checked
+    }
+    life.addEventListener('mouseover', mouseover, false)
+    life.addEventListener('mouseup', function mouseup() {
+      life.removeEventListener('mouseup', mouseup, false)
+      life.removeEventListener('mouseover', mouseover, false)
+    })
+  }
+})
+
 function board(width, height = width) {
   const row = [...Array(width)].map(Boolean)
   const board = []
