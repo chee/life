@@ -15,9 +15,11 @@ const directions = [
 
 go.addEventListener('mousedown', () => {
   const board = undraw()
+  const string = JSON.stringify(board.map(line => line.map(Number)))
   pause.style.display = 'block'
   go.style.display = 'none'
-  localStorage.setItem('board', JSON.stringify(board))
+  localStorage.setItem('board', string)
+  location.hash = encodeURIComponent(string)
   loop(board)
 })
 
@@ -93,5 +95,14 @@ function loop(board) {
   }, 250)
 }
 
-let storageBoard = localStorage.getItem('board')
-draw((storageBoard && JSON.parse(storageBoard)) || board(20))
+function storage() {
+  const storage = localStorage.getItem('board')
+  return storage && JSON.parse(storage)
+}
+
+function hash() {
+  const hashBoard = location.hash
+  return hash.length > 0 && JSON.parse(decodeURIComponent(hash))
+}
+
+draw(hash() || storage() || board(20))
