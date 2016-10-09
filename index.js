@@ -90,7 +90,7 @@ function loop(board) {
   timeout = setTimeout(() => {
     draw(board)
     loop(undraw())
-  }, 250)
+  }, 100)
 }
 
 let storageBoard = localStorage.getItem('board')
