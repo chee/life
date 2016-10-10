@@ -1,6 +1,7 @@
 const life = document.getElementById('life')
 const go = document.getElementById('go')
 const pause = document.getElementById('pause')
+const clear = document.getElementById('clear')
 
 const directions = [
   { x: -1, y: -1 },
@@ -15,16 +16,20 @@ const directions = [
 
 go.addEventListener('mousedown', () => {
   const board = undraw()
-  pause.style.display = 'block'
-  go.style.display = 'none'
+  pause.style.display = 'inline-block'
+  clear.style.display = go.style.display = 'none'
   localStorage.setItem('board', JSON.stringify(board))
   loop(board)
 })
 
 pause.addEventListener('mousedown', () => {
-  go.style.display = 'block'
+  clear.style.display = go.style.display = 'inline-block'
   pause.style.display = 'none'
   clearTimeout(timeout)
+})
+
+clear.addEventListener('mousedown', () => {
+  draw(clearBoard(undraw()))
 })
 
 life.addEventListener('mousedown', event => {
@@ -43,13 +48,19 @@ life.addEventListener('mousedown', event => {
   }
 })
 
-function board(width, height = width) {
+function buildBoard(width, height = width) {
   const row = [...Array(width)].map(Boolean)
   const board = []
   while (height--) {
     board.push([...row])
   }
   return board
+}
+
+function clearBoard(board) {
+  const width = board.length
+  const height = board[0].length
+  return buildBoard(width, height)
 }
 
 function draw(board) {
