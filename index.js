@@ -32,21 +32,32 @@ clear.addEventListener('mousedown', () => {
   draw(clearBoard(undraw()))
 })
 
-life.addEventListener('mousedown', event => {
+function tap(event) {
   const target = event.target
   if (target.type == 'checkbox') {
     const checked = target.checked
-    function mouseover(event) {
+    function drag(event) {
+      const currentTarget = event.touches
+        ? document.elementFromPoint(event.touches[0].clientX, event.touches[0].clientY)
+        : event.target
       target.checked = !checked
-      event.target.checked = !checked
+      currentTarget.checked = !checked
     }
-    life.addEventListener('mouseover', mouseover, false)
-    window.addEventListener('mouseup', function mouseup() {
-      life.removeEventListener('mouseup', mouseup, false)
-      life.removeEventListener('mouseover', mouseover, false)
-    })
+    function release() {
+      life.removeEventListener('mouseover', drag)
+      life.removeEventListener('touchmove', drag)
+      life.removeEventListener('mouseup', release)
+      life.removeEventListener('touchend', release)
+    }
+    life.addEventListener('mouseover', drag)
+    life.addEventListener('touchmove', drag)
+    window.addEventListener('mouseup', release)
+    window.addEventListener('touchend', release)
   }
-})
+}
+
+life.addEventListener('mousedown', tap)
+life.addEventListener('touchstart', tap)
 
 function buildBoard(width, height = width) {
   const row = [...Array(width)].map(Boolean)
