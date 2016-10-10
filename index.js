@@ -57,6 +57,13 @@ function buildBoard(width, height = width) {
   return board
 }
 
+function randomBoard(width, height = width) {
+  const board = buildBoard(width, height)
+  return board.map(line => line.map(cell => (
+    Math.random() > 0.5 ? true : false
+  )))
+}
+
 function clearBoard(board) {
   const width = board.length
   const height = board[0].length
@@ -105,4 +112,4 @@ function loop(board) {
 }
 
 let storageBoard = localStorage.getItem('board')
-draw((storageBoard && JSON.parse(storageBoard)) || board(20))
+draw((storageBoard && JSON.parse(storageBoard)) || randomBoard(20))
