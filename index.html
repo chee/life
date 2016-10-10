@@ -13,8 +13,22 @@ input {
   display: table-cell;
   position: relative;
   margin: 1px;
-  width: 2vw;
-  height: 2vw;
+  width: 4vw;
+  height: 4vw;
+}
+
+@media (min-width: 600px) {
+  input {
+    width: 3vw;
+    height: 3vw;
+  }
+}
+
+@media (min-width: 800px) {
+  input {
+    width: 2vw;
+    height: 2vw;
+  }
 }
 
 input::before {
